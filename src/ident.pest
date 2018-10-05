@@ -2,6 +2,7 @@ calc = { SOI ~ expr ~ EOI }
 
 expr = { term ~ ((add | sub | mul | div) ~ term)* }
 term = { ("(" ~ expr ~ ")") | number | var }
+
 add = { "+" }
 sub = { "-" }
 mul = { "*" }   
@@ -9,6 +10,7 @@ div = { "/" }
 
 var = @{ (alpha | "_") ~ (alpha | digit | "_")* }
 number = @{ ("-")? ~ int ~ ("." ~ int+)? }
+
 int = @{ digit+ }
 digit = { '0'..'9' }
 alpha = { 'a' .. 'z' | 'A' .. 'Z'}

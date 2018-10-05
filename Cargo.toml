@@ -6,3 +6,4 @@ authors = ["peter <peterjoel@gmail.com>"]
 [dependencies]
 pest = "2.0.1"
 pest_derive = "2.0.1"
+float-cmp = "0.4.0"
