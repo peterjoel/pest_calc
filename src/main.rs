@@ -5,7 +5,7 @@ extern crate pest_derive;
 use std::collections::HashMap;
 use pest::{
     Parser,
-    iterators::Pair,
+    iterators::{Pair, Pairs},
     prec_climber::{Operator, PrecClimber, Assoc},
 };
 
@@ -35,8 +35,8 @@ fn eval(pair: Pair<Rule>, climber: &PrecClimber<Rule>, vars: &HashMap<&str, f64>
 }
 
 struct Calc<'a> {
-    climber: PrecClimber<Rule>,
-    expression: &'a str,
+    climber: PrecClimber<Rule>, 
+    pairs: Pairs<'a, Rule>,
 }
 
 impl<'a> Calc<'a> {
@@ -45,11 +45,12 @@ impl<'a> Calc<'a> {
             Operator::new(Rule::add, Assoc::Left) | Operator::new(Rule::sub, Assoc::Left),
             Operator::new(Rule::mul, Assoc::Left) | Operator::new(Rule::div, Assoc::Left),
         ]);
-        Calc { climber, expression }
+        let pairs = CalcParser::parse(Rule::calc, expression).unwrap();
+        Calc { climber, pairs }
     }
 
     fn eval(&self, vars: &HashMap<&'a str, f64>) -> f64 {
-        let pairs = CalcParser::parse(Rule::calc, self.expression).unwrap();
+        let pairs = self.pairs.clone();
         eval(pairs.into_iter().next().unwrap(), &self.climber, vars)
     }
 }
